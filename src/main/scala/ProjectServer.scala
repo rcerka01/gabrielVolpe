@@ -5,17 +5,20 @@ import org.http4s.ember.client.EmberClientBuilder
 import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.implicits._
 import org.http4s.server.middleware.Logger
-import services.TestService
-import shop.api.TestRoutes
+import resources.Clients
+import services.{BrandService, TestService}
+import shop.api.{BrandRoutes, TestRoutes}
 
 object ProjectServer {
 
-  def stream[F[_]: Async]: Stream[F, Nothing] = {
+  def stream[F[_]: Async](clients: Clients[F]): Stream[F, Nothing] = {
+  //def stream[F[_]: Async]: Stream[F, Nothing] = {
     import cats.implicits._
     for {
       _ <- Stream.resource(EmberClientBuilder.default[F].build)
       helloWorldAlg = TestService.impl[F]
-      httpApp = ( TestRoutes.helloWorldRoutes[F](helloWorldAlg) ).orNotFound
+      brandsAlg = BrandService.impl[F](clients)
+      httpApp = ( TestRoutes.helloWorldRoutes[F](helloWorldAlg) <+> BrandRoutes.brandRoutes(brandsAlg)).orNotFound
 
       finalHttpApp = Logger.httpApp(true, true)(httpApp)
 

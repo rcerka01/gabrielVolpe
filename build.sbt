@@ -26,6 +26,9 @@ val tofuHigherKindVersion      = "0.10.4"
 val kindProjectorVersion       = "0.13.2"
 val squantsMoneyVersion        = "1.8.3"
 
+val cirisVersion               = "2.3.1"
+val skunkVersion               = "0.2.2"
+
 lazy val root = (project in file("."))
   .settings(
     name := "minimal",
@@ -53,6 +56,11 @@ lazy val root = (project in file("."))
       "tf.tofu"       %% "derevo-circe-magnolia" % derevoCirceMagnoliaVersion ,
       "tf.tofu"       %% "tofu-core-higher-kind" % tofuHigherKindVersion,
 
+      "is.cir"        %% "ciris"                 % cirisVersion,
+      "is.cir"        %% "ciris-refined"         % cirisVersion,
+      "is.cir"        %% "ciris-enumeratum"      % cirisVersion,
+
+      "org.tpolecat" %% "skunk-core"             % skunkVersion
     ),
     addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.2" cross CrossVersion.full),
     addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),
